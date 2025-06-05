@@ -1,38 +1,194 @@
 .App {
-  text-align: center;
+    padding: 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    font-family: Arial, sans-serif;
+    max-height: 98vh;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.zones-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.zone {
+    background-color: #f5f5f5;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.zone:hover {
+    background-color: #e0f7fa;
+    border-color: #00acc1;
+    color: #007c91;
 }
 
-.App-link {
-  color: #61dafb;
+.cycle-form {
+    margin-top: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem;
+    background-color: #fcfcfc;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.cycle-form h4 {
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.cycle-form label {
+    display: block;
+    margin-bottom: 0.25rem;
+    font-weight: bold;
+    color: #444;
+}
+
+.cycle-form input,
+.cycle-form select {
+    width: 100%;
+    padding: 0.4rem;
+    margin-bottom: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+button {
+    padding: 0.5rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    background-color: #007c91;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+button:hover {
+    background-color: #005f6b;
+}
+
+.zone-cycle {
+    margin-top: 20px;
+}
+
+.form-group {
+    display: flex;
+    gap: 10px
+}
+
+.mode-tabs {
+    display: flex;
+    gap: 2px;
+    margin-bottom: 2px;
+    justify-content: center;
+}
+
+.mode-tabs .tab-button {
+    padding: 0.4rem 1rem;
+    background-color: #7c9097;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.mode-tabs .tab-button.active {
+    background-color: #007c91;
+    color: white;
+    border-color: #007c91;
+}
+
+.water-now {
+    width: 100%;
+    margin-bottom: 1rem;
+    display: flex;
+    gap: 2px;
+}
+
+.water-now button {
+    width: 100%;
+    padding: 0.6rem;
+    background-color: #28a745;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.2s ease;
+}
+
+.water-now button:hover {
+    background-color: #1e7e34;
+}
+
+.control-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.calibration-values {
+    display: flex;
+    justify-content: space-around;
+}
+
+.wifi-setup {
+    margin: 20px auto;
+    max-width: 300px;
+    padding: 20px;
+    border: 2px solid #28a745;
+    border-radius: 10px;
+    background-color: #f0fff0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.wifi-button {
+    display: flex;
+    justify-content: space-between;
+     button{
+         width: 48%;
+     }
+
+}
+
+.wifi-form {
+    display: flex;
+    gap: 2px;
+    height: 30px;
+}
+
+@media only screen and (max-width: 600px) {
+    .smart-logo {
+
+        height: 200px;
+        width: 300px;
+        z-index: -1;
+    }
+
+    .logo-container {
+        display: flex;
+        z-index: -1;
+    }
+
+
 }
