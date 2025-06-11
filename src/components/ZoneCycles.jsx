@@ -4,11 +4,9 @@ import CycleForm from "./CycleForm";
 const ZoneCycles = ({zone, setVisible}) => {
     const [mode, setMode] = useState('moisture-cycles');
     const [cycles, setCycles] = useState([
-        {minMoisture: '', maxMoisture: '', dryCycle: '', startMonth: '', startDay: ''},
-        {minMoisture: '', maxMoisture: '', dryCycle: '', startMonth: '', startDay: ''},
-        {minMoisture: '', maxMoisture: '', dryCycle: '', startMonth: '', startDay: ''},
-        {minMoisture: '', maxMoisture: '', dryCycle: '', startMonth: '', startDay: ''},
+        {minMoisture: '', maxMoisture: '', dryCycle: '', startMonth: '', startDay: ''}
     ]);
+
     const [intervalMax, setIntervalMax] = useState({intervalDays: ''});
     const [intervalDuration, setIntervalDuration] = useState({intervalDays: '', durationMinutes: ''});
     const [watering, setWatering] = useState(false);
@@ -204,9 +202,29 @@ const ZoneCycles = ({zone, setVisible}) => {
                 </div>
 
             </div>
-            {mode === 'moisture-cycles' && cycles.map((cycle, index) => (
-                <CycleForm key={index} index={index} formData={cycle} onChange={handleFormChange}/>
-            ))}
+            {mode === 'moisture-cycles' && (
+                <>
+                    {cycles.map((cycle, index) => (
+                        <CycleForm key={index}
+                                   index={index}
+                                   formData={cycle}
+                                   onChange={handleFormChange}
+                                   onDelete={(i) => setCycles(cycles.filter((_, idx) => idx !== i))}/>
+                    ))}
+                    <button className="add-period" onClick={() =>
+                        setCycles([...cycles, {
+                            minMoisture: '',
+                            maxMoisture: '',
+                            dryCycle: '',
+                            startMonth: '',
+                            startDay: ''
+                        }])
+                    }>
+                        ➕ Add Period
+                    </button>
+                </>
+            )}
+
 
             {mode === 'interval-max' && (
                 <div className="cycle-form">

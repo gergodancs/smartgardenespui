@@ -1,9 +1,21 @@
 import React from 'react';
+import TrashIcon from "./icons/TrashIcon";
 
-const CycleForm = ({index, formData, onChange}) => {
+const CycleForm = ({index, formData, onChange, onDelete}) => {
     return (
         <div className="cycle-form">
-            <p style={{margin: "0 0 5px 0", fontWeight: "bolder"}}>Cycle {index + 1}</p>
+            <div style={{
+                margin: "0 0 5px 0",
+                fontWeight: "bolder",
+                display: "flex",
+                justifyContent: "space-around",
+                alignItems: "center"
+            }}>Irrigation period {index + 1}
+
+                <TrashIcon className="trash-icon" onClick={() => onDelete(index)}/>
+
+
+            </div>
             <div className="form-group">
 
                 <input

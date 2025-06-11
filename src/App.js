@@ -12,7 +12,6 @@ function App() {
 
     return (
         <div className="App">
-            <b style={{margin: "0", textAlign: "center", color: "#28a745", fontSize: "28px"}}>Smart garden</b>
             {!isFormVisible && <div className="logo-container">
                 <img className="smart-logo" src="/wifi2mini.png" alt="smartlogo"/>
             </div>}
