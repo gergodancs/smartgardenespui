@@ -10,6 +10,17 @@
     align-items: center;
 }
 
+.wifi-status {
+    font-size: 0.85rem;
+    margin: 10px auto;
+    padding: 6px 10px;
+    background: #eef2f4;
+    border-radius: 5px;
+    width: fit-content;
+    color: #333;
+    text-align: center;
+}
+
 .zones-wrapper {
     display: flex;
     flex-direction: column;
