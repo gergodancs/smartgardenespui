@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
 import CycleForm from "./CycleForm";
+import GenericCycleList from "./GenericCycleList";
 
 const ZoneCycles = ({zone, setVisible, setZone}) => {
     const [mode, setMode] = useState('intelligent-dry-cycle');
@@ -11,8 +12,15 @@ const ZoneCycles = ({zone, setVisible, setZone}) => {
         dryCycleDays: '', maxMoisture: '', skipIfRainExpected: true
     });
 
-    const [intervalMax, setIntervalMax] = useState({intervalDays: ''});
-    const [intervalDuration, setIntervalDuration] = useState({intervalDays: '', durationMinutes: ''});
+    const [intervalMaxCycles, setIntervalMaxCycles] = useState([
+        {intervalDays: '', maxMoisture: '', startMonth: '', startDay: ''}
+    ]);
+
+    const [intervalDurationCycles, setIntervalDurationCycles] = useState([
+        {intervalDays: '', durationMinutes: '', startMonth: '', startDay: ''}
+    ]);
+
+
     const [watering, setWatering] = useState(false);
     const [isWaterNowEnabled, setIsWaterNowEnabled] = useState(false);
     const [calibration, setCalibration] = useState({dryValue: null, wetValue: null});
@@ -50,19 +58,26 @@ const ZoneCycles = ({zone, setVisible, setZone}) => {
                     });
                 }
 
-                if (data.mode === 'interval-max') {
-                    setIntervalMax({
-                        intervalDays: String(data.intervalDays ?? ''),
-                        maxMoisture: String(data.maxMoisture ?? '')
-                    });
+                if (data.mode === 'interval-max' && Array.isArray(data.cycles)) {
+                    const filled = data.cycles.map(c => ({
+                        intervalDays: String(c.intervalDays ?? ''),
+                        maxMoisture: String(c.maxMoisture ?? ''),
+                        startMonth: String(c.startMonth ?? ''),
+                        startDay: String(c.startDay ?? '')
+                    }));
+                    setIntervalMaxCycles([...filled]);
                 }
 
-                if (data.mode === 'interval-duration') {
-                    setIntervalDuration({
-                        intervalDays: String(data.intervalDays ?? ''),
-                        durationMinutes: String(data.durationMinutes ?? '')
-                    });
+                if (data.mode === 'interval-duration' && Array.isArray(data.cycles)) {
+                    const filled = data.cycles.map(c => ({
+                        intervalDays: String(c.intervalDays ?? ''),
+                        durationMinutes: String(c.durationMinutes ?? ''),
+                        startMonth: String(c.startMonth ?? ''),
+                        startDay: String(c.startDay ?? '')
+                    }));
+                    setIntervalDurationCycles([...filled]);
                 }
+
 
             } catch (err) {
                 console.warn("Nem sikerült lekérni a mentett konfigurációt:", err);
@@ -80,15 +95,25 @@ const ZoneCycles = ({zone, setVisible, setZone}) => {
         }
 
         if (mode === 'interval-max') {
-            enabled = intervalMax.intervalDays !== '' && intervalMax.maxMoisture !== '';
+            enabled = intervalMaxCycles.some(c =>
+                c.intervalDays !== '' &&
+                c.maxMoisture !== '' &&
+                c.startMonth !== '' &&
+                c.startDay !== ''
+            );
         }
 
         if (mode === 'interval-duration') {
-            enabled = intervalDuration.intervalDays !== '' && intervalDuration.durationMinutes !== '';
+            enabled = intervalDurationCycles.some(c =>
+                c.intervalDays !== '' &&
+                c.durationMinutes !== '' &&
+                c.startMonth !== '' &&
+                c.startDay !== ''
+            );
         }
 
         setIsWaterNowEnabled(enabled);
-    }, [mode, cycles, intervalMax, intervalDuration]);
+    }, [mode, cycles, intervalMaxCycles, intervalDurationCycles]);
 
 
     const handleFormChange = (index, field, value) => {
@@ -127,11 +152,23 @@ const ZoneCycles = ({zone, setVisible, setZone}) => {
                 c.startDay !== ''
             );
         } else if (mode === 'interval-max') {
-            result.intervalDays = parseInt(intervalMax.intervalDays);
-            result.maxMoisture = parseInt(intervalMax.maxMoisture);
+            result.cycles = intervalMaxCycles.filter(c =>
+                c.intervalDays !== '' && c.maxMoisture !== '' && c.startMonth !== '' && c.startDay !== ''
+            ).map(c => ({
+                intervalDays: parseInt(c.intervalDays),
+                maxMoisture: parseInt(c.maxMoisture),
+                startMonth: parseInt(c.startMonth),
+                startDay: parseInt(c.startDay),
+            }));
         } else if (mode === 'interval-duration') {
-            result.intervalDays = parseInt(intervalDuration.intervalDays);
-            result.durationMinutes = parseInt(intervalDuration.durationMinutes);
+            result.cycles = intervalDurationCycles.filter(c =>
+                c.intervalDays !== '' && c.durationMinutes !== '' && c.startMonth !== '' && c.startDay !== ''
+            ).map(c => ({
+                intervalDays: parseInt(c.intervalDays),
+                durationMinutes: parseInt(c.durationMinutes),
+                startMonth: parseInt(c.startMonth),
+                startDay: parseInt(c.startDay),
+            }));
         } else if (mode === 'intelligent-dry-cycle') {
             result = {
                 zoneId: zone,
@@ -277,83 +314,81 @@ const ZoneCycles = ({zone, setVisible, setZone}) => {
             {mode === 'intelligent-dry-cycle' && (
                 <div className="cycle-form">
                     <div className="form-group">
-                        <input type="number" placeholder="Dry range min %" value={intelligent.dryRangeMin}
-                               onChange={(e) => setIntelligent({...intelligent, dryRangeMin: e.target.value})}/>
-                        <input type="number" placeholder="Dry range max %" value={intelligent.dryRangeMax}
-                               onChange={(e) => setIntelligent({...intelligent, dryRangeMax: e.target.value})}/>
+                        <div className="input-block">
+                            <label htmlFor="dryRangeMin">Dry range min (%)</label>
+                            <input id="dryRangeMin" type="number" value={intelligent.dryRangeMin}
+                                   onChange={(e) => setIntelligent({...intelligent, dryRangeMin: e.target.value})}/>
+                        </div>
+                        <div className="input-block">
+                            <label htmlFor="dryRangeMax">Dry range max (%)</label>
+                            <input id="dryRangeMax" type="number" value={intelligent.dryRangeMax}
+                                   onChange={(e) => setIntelligent({...intelligent, dryRangeMax: e.target.value})}/>
+                        </div>
                     </div>
+
                     <div className="form-group">
-                        <input type="number" placeholder="Required dry hours" value={intelligent.requiredDryHours}
-                               onChange={(e) => setIntelligent({...intelligent, requiredDryHours: e.target.value})}/>
-                        <input type="number" placeholder="Dry cycle (min. days)" value={intelligent.dryCycleDays}
-                               onChange={(e) => setIntelligent({...intelligent, dryCycleDays: e.target.value})}/>
+                        <div className="input-block">
+                            <label htmlFor="requiredDryHours">Required dry hours</label>
+                            <input id="requiredDryHours" type="number" value={intelligent.requiredDryHours}
+                                   onChange={(e) => setIntelligent({
+                                       ...intelligent,
+                                       requiredDryHours: e.target.value
+                                   })}/>
+                        </div>
+                        <div className="input-block">
+                            <label htmlFor="dryCycleDays">Dry cycle (min. days)</label>
+                            <input id="dryCycleDays" type="number" value={intelligent.dryCycleDays}
+                                   onChange={(e) => setIntelligent({...intelligent, dryCycleDays: e.target.value})}/>
+                        </div>
                     </div>
+
                     <div className="form-group">
-                        <input type="number" placeholder="Max moisture %"
-                               value={intelligent.maxMoisture}
-                               onChange={(e) => setIntelligent({...intelligent, maxMoisture: e.target.value})}/>
+                        <div className="input-block">
+                            <label htmlFor="maxMoisture">Max moisture %</label>
+                            <input id="maxMoisture" type="number" value={intelligent.maxMoisture}
+                                   onChange={(e) => setIntelligent({...intelligent, maxMoisture: e.target.value})}/>
+                        </div>
                         <div style={{
-                            width: '100%',
+                            width: '48%',
                             display: 'flex',
                             justifyContent: 'space-between',
                             alignItems: 'center',
                             padding: '0,4rem'
                         }}>
-                            <div style={{whiteSpace: 'nowrap', padding: "0.4rem", marginBottom: "0.75rem", color:"#6b6a6a"}}>Rain check
+                            <div style={{
+                                whiteSpace: 'nowrap',
+                                padding: "0.4rem",
+                                color: "#6b6a6a"
+                            }}>Rain check
                             </div>
-                            <input type="checkbox"
+                            <input id="skipRain" type="checkbox"
                                    checked={intelligent.skipIfRainExpected}
                                    onChange={(e) => setIntelligent({
                                        ...intelligent,
                                        skipIfRainExpected: e.target.checked
                                    })}/>
                         </div>
-
                     </div>
                 </div>
             )}
 
 
             {mode === 'interval-max' && (
-                <div className="cycle-form">
-                    <div className="form-group">
-                        <input
-                            type="number"
-                            placeholder="Interval in days"
-                            value={intervalMax.intervalDays}
-                            onChange={(e) => setIntervalMax({intervalDays: e.target.value})}
-                        />
-                        <input
-                            type="number"
-                            placeholder="Max moisture %"
-                            value={intervalMax.maxMoisture}
-                            onChange={(e) => setIntervalMax({...intervalMax, maxMoisture: e.target.value})}
-                        />
-                    </div>
-                </div>
+                <GenericCycleList
+                    cycles={intervalMaxCycles}
+                    setCycles={setIntervalMaxCycles}
+                    type="interval-max"
+                />
             )}
 
             {mode === 'interval-duration' && (
-                <div className="cycle-form">
-                    <div className="form-group">
-                        <input
-                            placeholder="Watering cyle interval in days"
-                            type="number"
-                            value={intervalDuration.intervalDays}
-                            onChange={(e) => setIntervalDuration({...intervalDuration, intervalDays: e.target.value})}
-                        />
-                        <input
-                            type="number"
-                            placeholder="Watering duration (minutes)"
-                            value={intervalDuration.durationMinutes}
-                            onChange={(e) => setIntervalDuration({
-                                ...intervalDuration,
-                                durationMinutes: e.target.value
-                            })}
-                        />
-                    </div>
-                </div>
+                <GenericCycleList
+                    cycles={intervalDurationCycles}
+                    setCycles={setIntervalDurationCycles}
+                    type="interval-duration"
+                />
             )}
+
 
             <div className="buttons">
                 <button onClick={handleSubmit}>Submit All</button>

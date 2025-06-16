@@ -76,7 +76,6 @@
 .cycle-form select {
     width: 100%;
     padding: 0.4rem;
-    margin-bottom: 0.75rem;
     border: 1px solid #ccc;
     border-radius: 4px;
 }
@@ -150,7 +149,7 @@ button:hover {
 .water-now button {
     width: 100%;
     padding: 0.6rem;
-    background-color: #28a745;
+    background-color: #439d58;
     color: white;
     font-weight: bold;
     border: none;
@@ -216,6 +215,33 @@ button:hover {
 .mb0{
     margin-bottom: 0 !important;
 }
+
+.input-block {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    margin-right: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.input-block label {
+    font-size: 10px;
+    color: #666;
+    margin-bottom: 2px;
+}
+
+.checkbox-row {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.checkbox-row label {
+    margin: 0;
+    font-size: 13px;
+    color: #666;
+}
+
 
 @media only screen and (max-width: 600px) {
     .smart-logo {
