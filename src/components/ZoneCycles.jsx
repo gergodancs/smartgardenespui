@@ -2,10 +2,14 @@ import React, {useEffect, useState} from "react";
 import CycleForm from "./CycleForm";
 
 const ZoneCycles = ({zone, setVisible}) => {
-    const [mode, setMode] = useState('moisture-cycles');
+    const [mode, setMode] = useState('intelligent-dry-cycle');
     const [cycles, setCycles] = useState([
         {minMoisture: '', maxMoisture: '', dryCycle: '', startMonth: '', startDay: ''}
     ]);
+    const [intelligent, setIntelligent] = useState({
+        dryRangeMin: '', dryRangeMax: '', requiredDryHours: '',
+        dryCycleDays: '', maxMoisture: '', skipIfRainExpected: true
+    });
 
     const [intervalMax, setIntervalMax] = useState({intervalDays: ''});
     const [intervalDuration, setIntervalDuration] = useState({intervalDays: '', durationMinutes: ''});
@@ -33,6 +37,17 @@ const ZoneCycles = ({zone, setVisible}) => {
                     setCycles([...filledCycles, ...new Array(4 - filledCycles.length).fill({
                         minMoisture: '', maxMoisture: '', dryCycle: '', startMonth: '', startDay: ''
                     })]);
+                }
+
+                if (data.mode === 'intelligent-dry-cycle') {
+                    setIntelligent({
+                        dryRangeMin: String(data.dryRangeMin ?? ''),
+                        dryRangeMax: String(data.dryRangeMax ?? ''),
+                        requiredDryHours: String(data.requiredDryHours ?? ''),
+                        dryCycleDays: String(data.dryCycleDays ?? ''),
+                        maxMoisture: String(data.maxMoisture ?? ''),
+                        skipIfRainExpected: Boolean(data.skipIfRainExpected ?? true),
+                    });
                 }
 
                 if (data.mode === 'interval-max') {
@@ -117,7 +132,20 @@ const ZoneCycles = ({zone, setVisible}) => {
         } else if (mode === 'interval-duration') {
             result.intervalDays = parseInt(intervalDuration.intervalDays);
             result.durationMinutes = parseInt(intervalDuration.durationMinutes);
+        } else if (mode === 'intelligent-dry-cycle') {
+            result = {
+                zoneId: zone,
+                mode,
+                ...intelligent,
+                dryRangeMin: parseInt(intelligent.dryRangeMin),
+                dryRangeMax: parseInt(intelligent.dryRangeMax),
+                requiredDryHours: parseInt(intelligent.requiredDryHours),
+                dryCycleDays: parseInt(intelligent.dryCycleDays),
+                maxMoisture: parseInt(intelligent.maxMoisture),
+                skipIfRainExpected: Boolean(intelligent.skipIfRainExpected)
+            };
         }
+
 
         try {
             const res = await fetch('/api/zone-config', {
@@ -179,27 +207,43 @@ const ZoneCycles = ({zone, setVisible}) => {
 
             <div className="control-panel">
                 <div className="mode-tabs">
-                    <button className={`tab-button ${mode === 'moisture-cycles' ? 'active' : ''}`}
-                            onClick={() => setMode('moisture-cycles')}>Moisture cycles
-                    </button>
-                    <button className={`tab-button ${mode === 'interval-max' ? 'active' : ''}`}
-                            onClick={() => setMode('interval-max')}>Interval (max)
-                    </button>
-                    <button className={`tab-button ${mode === 'interval-duration' ? 'active' : ''}`}
-                            onClick={() => setMode('interval-duration')}>Interval (duration)
-                    </button>
+                    <div style={{display: "flex", gap: "2px"}}>
+                        <button style={{width: '100%'}}
+                                className={`tab-button ${mode === 'intelligent-dry-cycle' ? 'active' : ''}`}
+                                onClick={() => setMode('intelligent-dry-cycle')}>
+                            Smart dry tracking
+                        </button>
+                        <button style={{width: '100%'}}
+                                className={`tab-button ${mode === 'moisture-cycles' ? 'active' : ''}`}
+                                onClick={() => setMode('moisture-cycles')}>
+                            Moisture cycles
+                        </button>
+                    </div>
+                    <div style={{display: "flex", gap: "2px"}}>
+                        <button style={{width: '100%'}}
+                                className={`tab-button ${mode === 'interval-max' ? 'active' : ''}`}
+                                onClick={() => setMode('interval-max')}>Interval (max)
+                        </button>
+                        <button style={{width: '100%'}}
+                                className={`tab-button ${mode === 'interval-duration' ? 'active' : ''}`}
+                                onClick={() => setMode('interval-duration')}>Interval (duration)
+                        </button>
+                    </div>
                 </div>
 
-                <div className="water-now">
-                    <button disabled={!isWaterNowEnabled}
-                            onClick={handleManualWater}>{watering ? 'Stop Watering' : 'Water Now'}</button>
-                    <button onClick={() => handleCalibration('dry')}>Set Dry</button>
-                    <button onClick={() => handleCalibration('wet')}>Set Wet</button>
+                <div className="water-now mb0">
+                    <button onClick={() => handleCalibration('dry')}>Calibrate dry</button>
+                    <button onClick={() => handleCalibration('wet')}>Calibrate wet</button>
                 </div>
                 <div className="calibration-values">
-                    <div>🌵 Dry value: {calibration.dryValue ?? 'unset'}</div>
-                    <div>💧 Wet value: {calibration.wetValue ?? 'unset'}</div>
+                    <div style={{fontSize: "13px"}}>Dry value: {calibration.dryValue ?? 'unset'}</div>
+                    <div style={{fontSize: "13px"}}>Wet value: {calibration.wetValue ?? 'unset'}</div>
                 </div>
+                <div>
+                    <button style={{width: '100%', backgroundColor: "#66a0cf"}} disabled={!isWaterNowEnabled}
+                            onClick={handleManualWater}>{watering ? 'Stop Watering' : 'Water Now'}</button>
+                </div>
+
 
             </div>
             {mode === 'moisture-cycles' && (
@@ -220,9 +264,48 @@ const ZoneCycles = ({zone, setVisible}) => {
                             startDay: ''
                         }])
                     }>
-                        ➕ Add Period
+                        Add Period
                     </button>
                 </>
+            )}
+
+            {mode === 'intelligent-dry-cycle' && (
+                <div className="cycle-form">
+                    <div className="form-group">
+                        <input type="number" placeholder="Dry range min %" value={intelligent.dryRangeMin}
+                               onChange={(e) => setIntelligent({...intelligent, dryRangeMin: e.target.value})}/>
+                        <input type="number" placeholder="Dry range max %" value={intelligent.dryRangeMax}
+                               onChange={(e) => setIntelligent({...intelligent, dryRangeMax: e.target.value})}/>
+                    </div>
+                    <div className="form-group">
+                        <input type="number" placeholder="Required dry hours" value={intelligent.requiredDryHours}
+                               onChange={(e) => setIntelligent({...intelligent, requiredDryHours: e.target.value})}/>
+                        <input type="number" placeholder="Dry cycle (min. days)" value={intelligent.dryCycleDays}
+                               onChange={(e) => setIntelligent({...intelligent, dryCycleDays: e.target.value})}/>
+                    </div>
+                    <div className="form-group">
+                        <input type="number" placeholder="Max moisture %"
+                               value={intelligent.maxMoisture}
+                               onChange={(e) => setIntelligent({...intelligent, maxMoisture: e.target.value})}/>
+                        <div style={{
+                            width: '100%',
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            padding: '0,4rem'
+                        }}>
+                            <div style={{whiteSpace: 'nowrap', padding: "0.4rem", marginBottom: "0.75rem", color:"#6b6a6a"}}>Rain check
+                            </div>
+                            <input type="checkbox"
+                                   checked={intelligent.skipIfRainExpected}
+                                   onChange={(e) => setIntelligent({
+                                       ...intelligent,
+                                       skipIfRainExpected: e.target.checked
+                                   })}/>
+                        </div>
+
+                    </div>
+                </div>
             )}
 
 
