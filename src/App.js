@@ -14,9 +14,7 @@ function App() {
     return (
         <div className="App">
             <WifiStatus />
-            {!isFormVisible && <div className="logo-container">
-                <img className="smart-logo" src="/wifi2mini.png" alt="smartlogo"/>
-            </div>}
+            <h1>Smart garden</h1>
             {wifiVisible && <WifiSetup onClose={() => setWifiVisible(false)} />}
             {!isFormVisible
                 ? <>
