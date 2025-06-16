@@ -23,7 +23,7 @@ function App() {
                     </button>
                     <Zone setVisible={setIsFormVisible} setZone={setZone}/>
                 </>
-                : <ZoneCycles zone={zone} setVisible={setIsFormVisible}/>
+                : <ZoneCycles zone={zone} setVisible={setIsFormVisible} setZone={setZone}/>
             }
         </div>
     );

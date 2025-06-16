@@ -29,10 +29,10 @@ const WifiStatus = () => {
     return (
         <div className="wifi-status">
             {wifi.connected ? (
-                <div>
-                    ✅ <strong>{wifi.ssid}</strong><br/>
-                    📶 {wifi.rssi} dBm<br/>
-                    🌐 {wifi.ip}
+                <div style={{display: "flex", justifyContent: "space-between"}}>
+                   <div>✅ <strong>{wifi.ssid}</strong><br/></div>
+                   <div>📶 {wifi.rssi} dBm<br/></div>
+                    <div>🌐 {wifi.ip}</div>
                 </div>
             ) : (
                 <div>❌ Not connected</div>

@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import CycleForm from "./CycleForm";
 
-const ZoneCycles = ({zone, setVisible}) => {
+const ZoneCycles = ({zone, setVisible, setZone}) => {
     const [mode, setMode] = useState('intelligent-dry-cycle');
     const [cycles, setCycles] = useState([
         {minMoisture: '', maxMoisture: '', dryCycle: '', startMonth: '', startDay: ''}
@@ -24,7 +24,7 @@ const ZoneCycles = ({zone, setVisible}) => {
                 if (!res.ok) return;
 
                 const data = await res.json();
-                setMode(data.mode || 'moisture-cycles');
+                setMode(data.mode || 'intelligent-dry-cycle');
 
                 if (data.mode === 'moisture-cycles' && Array.isArray(data.cycles)) {
                     const filledCycles = data.cycles.map(c => ({
@@ -184,6 +184,11 @@ const ZoneCycles = ({zone, setVisible}) => {
             alert('⚠️ Hiba a kalibrálás közben.');
         }
     };
+
+    const goToMainPage = () => {
+        setVisible(false);
+        setZone(-1);
+    }
 
     useEffect(() => {
         const fetchCalibration = async () => {
@@ -352,7 +357,7 @@ const ZoneCycles = ({zone, setVisible}) => {
 
             <div className="buttons">
                 <button onClick={handleSubmit}>Submit All</button>
-                <button onClick={() => setVisible(false)}>Back</button>
+                <button onClick={goToMainPage}>Back</button>
             </div>
         </div>
     );
