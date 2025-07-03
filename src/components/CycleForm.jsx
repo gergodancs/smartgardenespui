@@ -76,6 +76,35 @@ const CycleForm = ({index, formData, onChange, onDelete}) => {
                     </select>
                 </div>
             </div>
+
+            <div className="form-group">
+                <div className="input-block">
+                    <label htmlFor={`startHour-${index}`}>Allowed from (hour)</label>
+                    <select
+                        id={`startHour-${index}`}
+                        value={formData.startHour || ''}
+                        onChange={(e) => onChange(index, 'startHour', e.target.value)}
+                    >
+                        <option value="">Any time</option>
+                        {[...Array(24)].map((_, i) => (
+                            <option key={i} value={i}>{i}:00</option>
+                        ))}
+                    </select>
+                </div>
+                <div className="input-block">
+                    <label htmlFor={`endHour-${index}`}>Until (hour)</label>
+                    <select
+                        id={`endHour-${index}`}
+                        value={formData.endHour || ''}
+                        onChange={(e) => onChange(index, 'endHour', e.target.value)}
+                    >
+                        <option value="">Any time</option>
+                        {[...Array(24)].map((_, i) => (
+                            <option key={i} value={i}>{i}:00</option>
+                        ))}
+                    </select>
+                </div>
+            </div>
         </div>
     );
 };

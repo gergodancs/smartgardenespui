@@ -12,7 +12,9 @@ const GenericCycleList = ({cycles, setCycles, type}) => {
             intervalDays: '',
             ...(type === 'interval-max' ? {maxMoisture: ''} : {durationMinutes: ''}),
             startMonth: '',
-            startDay: ''
+            startDay: '',
+            startHour: '',
+            endHour: ''
         };
         setCycles([...cycles, emptyCycle]);
     };
@@ -79,6 +81,35 @@ const GenericCycleList = ({cycles, setCycles, type}) => {
                                 <option value="">Select day</option>
                                 {[...Array(31)].map((_, i) => (
                                     <option key={i} value={i + 1}>{i + 1}</option>
+                                ))}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div className="form-group">
+                        <div className="input-block">
+                            <label htmlFor={`startHour-${index}`}>Allowed from (hour)</label>
+                            <select
+                                id={`startHour-${index}`}
+                                value={cycle.startHour || ''}
+                                onChange={(e) => handleChange(index, 'startHour', e.target.value)}
+                            >
+                                <option value="">Any time</option>
+                                {[...Array(24)].map((_, i) => (
+                                    <option key={i} value={i}>{i}:00</option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="input-block">
+                            <label htmlFor={`endHour-${index}`}>Until (hour)</label>
+                            <select
+                                id={`endHour-${index}`}
+                                value={cycle.endHour || ''}
+                                onChange={(e) => handleChange(index, 'endHour', e.target.value)}
+                            >
+                                <option value="">Any time</option>
+                                {[...Array(24)].map((_, i) => (
+                                    <option key={i} value={i}>{i}:00</option>
                                 ))}
                             </select>
                         </div>
