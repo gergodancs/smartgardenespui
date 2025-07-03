@@ -192,9 +192,9 @@ button:hover {
 .wifi-button {
     display: flex;
     justify-content: space-between;
-     button{
-         width: 48%;
-     }
+    button{
+        width: 48%;
+    }
 
 }
 

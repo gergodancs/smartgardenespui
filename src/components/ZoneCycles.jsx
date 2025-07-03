@@ -115,6 +115,20 @@ const ZoneCycles = ({zone, setVisible, setZone}) => {
         setIsWaterNowEnabled(enabled);
     }, [mode, cycles, intervalMaxCycles, intervalDurationCycles]);
 
+    useEffect(() => {
+        const fetchActiveZones = async () => {
+            try {
+                const res = await fetch('/api/active-zones');
+                if (!res.ok) return;
+                const activeZoneIds = await res.json();
+                setWatering(activeZoneIds.includes(zone));
+            } catch (err) {
+                console.warn("Nem sikerült lekérni az aktív zónákat:", err);
+            }
+        };
+        void fetchActiveZones();
+    }, [zone]);
+
 
     const handleFormChange = (index, field, value) => {
         const updated = [...cycles];
