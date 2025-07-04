@@ -15,10 +15,10 @@ function App() {
 
     return (
         <div className="App">
-            <WifiStatus />
+            <WifiStatus/>
 
-            <h1>Smart garden</h1>
-            {wifiVisible && <WifiSetup onClose={() => setWifiVisible(false)} />}
+            <h1 style={{marginTop: "0"}}>Smart garden</h1>
+            {wifiVisible && <WifiSetup onClose={() => setWifiVisible(false)}/>}
             {!isFormVisible
                 ? <>
                     <button onClick={() => setWifiVisible(true)} className="wifi-button">
@@ -27,7 +27,7 @@ function App() {
                     <div className="settings-bar" onClick={() => setSettingsOpen((prev) => !prev)}>
                         ⚙️ Settings
                     </div>
-                    {settingsOpen && <SettingsPage onClose={() => setSettingsOpen(false)} />}
+                    {settingsOpen && <SettingsPage onClose={() => setSettingsOpen(false)}/>}
                     <Zone setVisible={setIsFormVisible} setZone={setZone}/>
                 </>
                 : <ZoneCycles zone={zone} setVisible={setIsFormVisible} setZone={setZone}/>

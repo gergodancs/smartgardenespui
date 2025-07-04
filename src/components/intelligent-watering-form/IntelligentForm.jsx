@@ -1,6 +1,6 @@
 import React from 'react';
 
-const IntelligentForm = ({ intelligent, setIntelligent }) => {
+const IntelligentForm = ({intelligent, setIntelligent}) => {
     return (
         <div className="cycle-form">
             <div className="form-group">
@@ -42,25 +42,35 @@ const IntelligentForm = ({ intelligent, setIntelligent }) => {
                     alignItems: 'center',
                     padding: '0.4rem'
                 }}>
-                    <div style={{ whiteSpace: 'nowrap', color: "#6b6a6a" }}>Rain check</div>
-                    <input id="skipRain" type="checkbox"
-                           checked={intelligent.skipIfRainExpected}
-                           onChange={(e) => setIntelligent({...intelligent, skipIfRainExpected: e.target.checked})}/>
                 </div>
             </div>
 
             <div className="form-group">
                 <div className="input-block">
-                    <label htmlFor="startHour">Start hour (0–23)</label>
-                    <input id="startHour" type="number" min="0" max="23"
-                           value={intelligent.startHour}
-                           onChange={(e) => setIntelligent({...intelligent, startHour: e.target.value})}/>
+                    <label htmlFor={`startHour`}>Allowed from (hour)</label>
+                    <select
+                        id={`startHour`}
+                        value={intelligent.startHour || ''}
+                        onChange={(e) => setIntelligent(...intelligent, 'startHour', e.target.value)}
+                    >
+                        <option value="">Any time</option>
+                        {[...Array(24)].map((_, i) => (
+                            <option key={i} value={i}>{i}:00</option>
+                        ))}
+                    </select>
                 </div>
                 <div className="input-block">
-                    <label htmlFor="endHour">End hour (0–23)</label>
-                    <input id="endHour" type="number" min="0" max="23"
-                           value={intelligent.endHour}
-                           onChange={(e) => setIntelligent({...intelligent, endHour: e.target.value})}/>
+                    <label htmlFor={`endHour`}>Until (hour)</label>
+                    <select
+                        id={`endHour`}
+                        value={intelligent.endHour || ''}
+                        onChange={(e) => setIntelligent(...intelligent, 'endHour', e.target.value)}
+                    >
+                        <option value="">Any time</option>
+                        {[...Array(24)].map((_, i) => (
+                            <option key={i} value={i}>{i}:00</option>
+                        ))}
+                    </select>
                 </div>
             </div>
         </div>

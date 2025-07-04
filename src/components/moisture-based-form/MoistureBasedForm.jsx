@@ -1,7 +1,7 @@
 import React from 'react';
-import TrashIcon from "./icons/TrashIcon";
+import TrashIcon from "../icons/TrashIcon";
 
-const CycleForm = ({index, formData, onChange, onDelete}) => {
+const MoistureBasedForm = ({index, formData, onChange, onDelete}) => {
     return (
         <div className="cycle-form">
             <div style={{
@@ -109,4 +109,4 @@ const CycleForm = ({index, formData, onChange, onDelete}) => {
     );
 };
 
-export default CycleForm;
+export default MoistureBasedForm;

@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from "react";
-import CycleForm from "./CycleForm";
+import MoistureBasedForm from "./moisture-based-form/MoistureBasedForm";
 import GenericCycleList from "./common-intervall-form/GenericCycleList";
 import IntelligentForm from "./intelligent-watering-form/IntelligentForm";
 import ModeTabs from "./mode-tabs/ModeTabs";
 import Calibration from "./sensor-calibration/Calibration";
 import useZoneConfig from "../hooks/useZoneConfig";
 import useSubmitZoneConfig from "../hooks/useSubmitZoneConfig";
+import WeatherForm from "./weather-form/WeatherForm";
 
 const ZoneCycles = ({zone, setVisible, setZone}) => {
     const [mode, setMode] = useState('intelligent-dry-cycle');
@@ -33,39 +34,19 @@ const ZoneCycles = ({zone, setVisible, setZone}) => {
         {intervalDays: '', durationMinutes: '', startMonth: '', startDay: '', startHour: '', endHour: ''}
     ]);
 
+    const [weather, setWeather] = useState({
+        enabled: false,
+        rainChanceThreshold: '',  // % esély fölött számít várhatónak az eső
+        forecastDays: '',         // ennyi napon belül vizsgálja az esőt
+        criticalMoisture: '',     // ha ez alatt van, akkor ne várjon esőre
+        preRainFill: '',          // ha túl száraz, de eső várható, idáig töltse fel
+    });
+
+
     const [watering, setWatering] = useState(false);
-    const [isWaterNowEnabled, setIsWaterNowEnabled] = useState(false);
 
     const submitZoneConfig = useSubmitZoneConfig();
     useZoneConfig(zone, setMode, setIntelligent, setCycles, setIntervalMaxCycles, setIntervalDurationCycles);
-
-    useEffect(() => {
-        let enabled = false;
-
-        if (mode === 'moisture-cycles') {
-            enabled = cycles.some(c => c.minMoisture !== '' && c.maxMoisture !== '');
-        }
-
-        if (mode === 'interval-max') {
-            enabled = intervalMaxCycles.some(c =>
-                c.intervalDays !== '' &&
-                c.maxMoisture !== '' &&
-                c.startMonth !== '' &&
-                c.startDay !== ''
-            );
-        }
-
-        if (mode === 'interval-duration') {
-            enabled = intervalDurationCycles.some(c =>
-                c.intervalDays !== '' &&
-                c.durationMinutes !== '' &&
-                c.startMonth !== '' &&
-                c.startDay !== ''
-            );
-        }
-
-        setIsWaterNowEnabled(enabled);
-    }, [mode, cycles, intervalMaxCycles, intervalDurationCycles]);
 
     useEffect(() => {
         const fetchActiveZones = async () => {
@@ -113,7 +94,8 @@ const ZoneCycles = ({zone, setVisible, setZone}) => {
                 mode === 'moisture-cycles' ? cycles :
                     mode === 'interval-max' ? intervalMaxCycles :
                         mode === 'interval-duration' ? intervalDurationCycles : [],
-            intelligent
+            intelligent,
+            weather: weather.enabled ? weather : { enabled: false }
         });
     };
 
@@ -135,7 +117,6 @@ const ZoneCycles = ({zone, setVisible, setZone}) => {
         setZone(-1);
     }
 
-
     return (
         <div className="zone-cycles">
 
@@ -143,18 +124,31 @@ const ZoneCycles = ({zone, setVisible, setZone}) => {
                 <ModeTabs mode={mode} setMode={setMode}/>
                 <Calibration zone={zone}/>
                 <div>
-                    <button style={{width: '100%', backgroundColor: "#66a0cf"}} disabled={!isWaterNowEnabled}
-                            onClick={handleManualWater}>{watering ? 'Stop Watering' : 'Water Now'}</button>
+                    <button style={{width: '100%', backgroundColor: "#66a0cf"}}
+                            onClick={handleManualWater}>
+                        {watering ? 'Stop Watering' : 'Water Now'}
+                    </button>
                 </div>
             </div>
+
+
+            {(mode === 'moisture-cycles' ||
+                mode === 'interval-max' ||
+                mode === 'interval-duration' ||
+                mode === 'intelligent-dry-cycle') && (
+                <WeatherForm weather={weather} setWeather={setWeather}/>
+            )}
+
             {mode === 'moisture-cycles' && (
                 <>
                     {cycles.map((cycle, index) => (
-                        <CycleForm key={index}
-                                   index={index}
-                                   formData={cycle}
-                                   onChange={handleFormChange}
-                                   onDelete={(i) => setCycles(cycles.filter((_, idx) => idx !== i))}/>
+                        <MoistureBasedForm
+                            key={index}
+                            index={index}
+                            formData={cycle}
+                            onChange={handleFormChange}
+                            onDelete={(i) => setCycles(cycles.filter((_, idx) => idx !== i))}
+                        />
                     ))}
                     <button className="add-period" onClick={() =>
                         setCycles([...cycles, {
@@ -176,7 +170,6 @@ const ZoneCycles = ({zone, setVisible, setZone}) => {
                 <IntelligentForm intelligent={intelligent} setIntelligent={setIntelligent}/>
             )}
 
-
             {mode === 'interval-max' && (
                 <GenericCycleList
                     cycles={intervalMaxCycles}
@@ -193,13 +186,13 @@ const ZoneCycles = ({zone, setVisible, setZone}) => {
                 />
             )}
 
-
             <div className="buttons">
                 <button onClick={handleSubmit}>Submit All</button>
                 <button onClick={goToMainPage}>Back</button>
             </div>
         </div>
     );
+
 };
 
 export default ZoneCycles;
