@@ -3,7 +3,6 @@ import React from 'react';
 const WeatherForm = ({weather, setWeather}) => {
     return (
         <div className="cycle-form">
-            {/* Rain skip logic */}
             <div className="form-group">
                 <div style={{marginBottom: "8px"}}>
                     <div style={{

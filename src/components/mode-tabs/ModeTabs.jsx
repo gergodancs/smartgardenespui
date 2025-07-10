@@ -7,12 +7,12 @@ const ModeTabs = ({mode, setMode}) => {
                 <button style={{width: '100%'}}
                         className={`tab-button ${mode === 'intelligent-dry-cycle' ? 'active' : ''}`}
                         onClick={() => setMode('intelligent-dry-cycle')}>
-                    Smart dry tracking
+                    Full control
                 </button>
                 <button style={{width: '100%'}}
                         className={`tab-button ${mode === 'moisture-cycles' ? 'active' : ''}`}
                         onClick={() => setMode('moisture-cycles')}>
-                    Moisture cycles
+                    Moisture based
                 </button>
             </div>
             <div style={{display: "flex", gap: "2px"}}>

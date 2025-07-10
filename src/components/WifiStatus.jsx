@@ -1,13 +1,15 @@
 // components/WifiStatus.js
 import React, {useEffect, useState} from "react";
+import WifiSetup from "./WifiSetup";
 
-const WifiStatus = () => {
+const WifiStatus = ({isFormVisible}) => {
     const [wifi, setWifi] = useState({
         connected: false,
         ip: '',
         ssid: '',
         rssi: ''
     });
+    const [wifiVisible, setWifiVisible] = useState(false);
     useEffect(() => {
         const fetchStatus = async () => {
             try {
@@ -18,33 +20,34 @@ const WifiStatus = () => {
                 // Ha előzőleg nem volt csatlakozva és most igen → újratöltés
                 if (!wifi.connected && data.connected) {
                     setWifi(data);
-                    setTimeout(() => window.location.reload(), 2000); // kicsi késleltetés
-                    return;
+                } else {
+                    setWifi(data);
                 }
-
-                setWifi(data);
             } catch (err) {
                 console.warn("Wi-Fi státusz hiba:", err);
             }
         };
 
         void fetchStatus();
-        const interval = setInterval(fetchStatus, 10000);
+        const interval = setInterval(fetchStatus, 30000);
         return () => clearInterval(interval);
     }, []);
 
 
     return (
-        <div className="wifi-status">
+        <div className="wifi-status" style={{margin: "0"}}>
             {wifi.connected ? (
                 <div style={{display: "flex", justifyContent: "space-between"}}>
-                   <div>✅ <strong>{wifi.ssid}</strong><br/></div>
-                   <div>📶 {wifi.rssi} dBm<br/></div>
+                    <div>✅ <strong>{wifi.ssid}</strong><br/></div>
+                    <div>📶 {wifi.rssi} dBm<br/></div>
                     <div>🌐 {wifi.ip}</div>
                 </div>
-            ) : (
-                <div>❌ Not connected</div>
-            )}
+            ) : null}
+            {wifiVisible && <WifiSetup onClose={() => setWifiVisible(false)}/>}
+            {!isFormVisible && !wifiVisible && !wifi.connected &&
+                <div className="zone" style={{width: '200px'}} onClick={() => setWifiVisible(true)} >
+                    WiFi connect
+                </div>}
         </div>
     );
 };

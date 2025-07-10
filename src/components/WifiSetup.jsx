@@ -8,10 +8,17 @@ const WifiSetup = ({onClose}) => {
 
     useEffect(() => {
         fetch('/api/wifi-scan')
-            .then(res => res.json())
-            .then(setNetworks)
+            .then(res => {
+                console.log('Raw response:', res);
+                return res.json();
+            })
+            .then(data => {
+                console.log('Parsed JSON:', data);
+                setNetworks(data);
+            })
             .catch(err => console.warn('Hálózat lista lekérés hiba:', err));
     }, []);
+
 
     const handleConnect = async () => {
         try {

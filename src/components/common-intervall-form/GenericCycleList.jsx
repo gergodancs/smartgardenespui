@@ -58,7 +58,7 @@ const GenericCycleList = ({cycles, setCycles, type}) => {
                     </div>
 
                     <div className="form-group">
-                        <div className="input-block">
+                        <div className="input-block mr-2">
                             <label htmlFor={`startMonth-${index}`}>Start month</label>
                             <select
                                 id={`startMonth-${index}`}
@@ -71,7 +71,7 @@ const GenericCycleList = ({cycles, setCycles, type}) => {
                                 ))}
                             </select>
                         </div>
-                        <div className="input-block">
+                        <div className="input-block mr-2">
                             <label htmlFor={`startDay-${index}`}>Start day</label>
                             <select
                                 id={`startDay-${index}`}
@@ -87,7 +87,7 @@ const GenericCycleList = ({cycles, setCycles, type}) => {
                     </div>
 
                     <div className="form-group">
-                        <div className="input-block">
+                        <div className="input-block mr-2">
                             <label htmlFor={`startHour-${index}`}>Allowed from (hour)</label>
                             <select
                                 id={`startHour-${index}`}
@@ -100,7 +100,7 @@ const GenericCycleList = ({cycles, setCycles, type}) => {
                                 ))}
                             </select>
                         </div>
-                        <div className="input-block">
+                        <div className="input-block mr-2">
                             <label htmlFor={`endHour-${index}`}>Until (hour)</label>
                             <select
                                 id={`endHour-${index}`}

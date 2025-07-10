@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-export default function useZoneConfig(zone, setMode, setIntelligent, setCycles, setIntervalMaxCycles, setIntervalDurationCycles) {
+export default function useZoneConfig(zone, setMode, setIntelligent, setCycles, setIntervalMaxCycles, setIntervalDurationCycles,setWeather) {
     useEffect(() => {
         const loadZoneConfig = async () => {
             if (!zone) return;
@@ -60,6 +60,15 @@ export default function useZoneConfig(zone, setMode, setIntelligent, setCycles, 
                         endHour: String(c.endHour ?? '')
                     })));
                 }
+                if (data.weather && setWeather) {
+                    setWeather({
+                        enabled: Boolean(data.weather.enabled ?? false),
+                        rainChanceThreshold: String(data.weather.rainChanceThreshold ?? ''),
+                        forecastDays: String(data.weather.forecastDays ?? ''),
+                        criticalMoisture: String(data.weather.criticalMoisture ?? ''),
+                        preRainFill: String(data.weather.preRainFill ?? '')
+                    });
+                }
 
             } catch (err) {
                 console.warn("Nem sikerült lekérni a mentett konfigurációt:", err);
@@ -67,5 +76,5 @@ export default function useZoneConfig(zone, setMode, setIntelligent, setCycles, 
         };
 
        void loadZoneConfig();
-    }, [zone, setMode, setIntelligent, setCycles, setIntervalMaxCycles, setIntervalDurationCycles]);
+    }, [zone, setMode, setIntelligent, setCycles, setIntervalMaxCycles, setIntervalDurationCycles, setWeather]);
 }

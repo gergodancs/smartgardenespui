@@ -12,6 +12,14 @@
     background-color: #f7f5f5;
 }
 
+.mr-2 {
+    margin-right: 2px !important;
+}
+
+.h-30 {
+    height: 30px !important;
+}
+
 .wifi-status {
     font-size: 0.85rem;
     margin: 10px auto;
@@ -42,6 +50,7 @@
     font-weight: bold;
     cursor: pointer;
     transition: all 0.2s ease;
+    color: #666666;
 }
 
 .zone:hover {
@@ -119,7 +128,6 @@ button:hover {
     display: flex;
     flex-direction: column;
     gap: 2px;
-    margin-bottom: 2px;
     justify-content: center;
 }
 
@@ -148,11 +156,11 @@ button:hover {
 
 .water-now button {
     width: 100%;
-    padding: 0.6rem;
+    padding: 0.4rem 1rem;
     background-color: #439d58;
     color: white;
     font-weight: bold;
-    border: none;
+    border:1px solid lightgreen;
     border-radius: 5px;
     transition: background-color 0.2s ease;
 }
@@ -198,6 +206,16 @@ button:hover {
 
 }
 
+.wifi-connect{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid #8a8a8a;
+    border-radius: 6px;
+    padding: 0.4rem 1rem;
+    background-color: #666;
+}
+
 .wifi-form {
     display: flex;
     gap: 2px;
@@ -224,6 +242,13 @@ button:hover {
     margin-bottom: 0.5rem;
 }
 
+.input-block select {
+    height: 30px;
+    color: #666;
+    font-size: 11px;
+
+}
+
 .input-block label {
     font-size: 10px;
     color: #666;
@@ -241,6 +266,13 @@ button:hover {
     font-size: 13px;
     color: #666;
 }
+
+.settings-bar{
+    position: absolute;
+    right: 5px;
+    top: 5px;
+}
+
 
 
 @media only screen and (max-width: 600px) {

@@ -14,6 +14,9 @@ const ZoneCycles = ({zone, setVisible, setZone}) => {
     const [intelligent, setIntelligent] = useState({
         dryRangeMin: '',
         dryRangeMax: '',
+        wetMin:'',
+        wetMax:'',
+        wetHoldHours:'',
         requiredDryHours: '',
         dryCycleDays: '',
         maxMoisture: '',
@@ -46,7 +49,7 @@ const ZoneCycles = ({zone, setVisible, setZone}) => {
     const [watering, setWatering] = useState(false);
 
     const submitZoneConfig = useSubmitZoneConfig();
-    useZoneConfig(zone, setMode, setIntelligent, setCycles, setIntervalMaxCycles, setIntervalDurationCycles);
+    useZoneConfig(zone, setMode, setIntelligent, setCycles, setIntervalMaxCycles, setIntervalDurationCycles, setWeather);
 
     useEffect(() => {
         const fetchActiveZones = async () => {
@@ -124,20 +127,12 @@ const ZoneCycles = ({zone, setVisible, setZone}) => {
                 <ModeTabs mode={mode} setMode={setMode}/>
                 <Calibration zone={zone}/>
                 <div>
-                    <button style={{width: '100%', backgroundColor: "#66a0cf"}}
+                    <button style={{width: '100%', backgroundColor: "#66a0cf",padding: "0.4rem 1rem", border:"1px solid lightblue"}}
                             onClick={handleManualWater}>
                         {watering ? 'Stop Watering' : 'Water Now'}
                     </button>
                 </div>
             </div>
-
-
-            {(mode === 'moisture-cycles' ||
-                mode === 'interval-max' ||
-                mode === 'interval-duration' ||
-                mode === 'intelligent-dry-cycle') && (
-                <WeatherForm weather={weather} setWeather={setWeather}/>
-            )}
 
             {mode === 'moisture-cycles' && (
                 <>
@@ -186,8 +181,15 @@ const ZoneCycles = ({zone, setVisible, setZone}) => {
                 />
             )}
 
+            {(mode === 'moisture-cycles' ||
+                mode === 'interval-max' ||
+                mode === 'interval-duration' ||
+                mode === 'intelligent-dry-cycle') && (
+                <WeatherForm weather={weather} setWeather={setWeather}/>
+            )}
+
             <div className="buttons">
-                <button onClick={handleSubmit}>Submit All</button>
+                <button onClick={handleSubmit}>Save</button>
                 <button onClick={goToMainPage}>Back</button>
             </div>
         </div>
