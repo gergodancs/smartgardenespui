@@ -40,16 +40,17 @@ const WifiSetup = ({onClose}) => {
     };
 
     return (
-        <div className="wifi-setup">
-            <h3 style={{margin: "0"}}>Válassz hálózatot</h3>
-            <div className="wifi-form">
+        <div className="cycle-form">
+            <h3 style={{marginBottom: "5px", marginTop:'0'}}>Válassz hálózatot</h3>
+            <div className="input-block mr-2">
                 <select value={selectedSsid} onChange={e => setSelectedSsid(e.target.value)}>
                     <option value="">-- Válassz --</option>
                     {networks.map((ssid, i) => (
                         <option key={i} value={ssid}>{ssid}</option>
                     ))}
                 </select>
-
+            </div>
+            <div className="input-block">
                 <input
                     type="password"
                     placeholder="WiFi jelszó"
@@ -57,6 +58,7 @@ const WifiSetup = ({onClose}) => {
                     onChange={e => setPassword(e.target.value)}
                 />
             </div>
+
             <div className="wifi-button">
                 <button onClick={handleConnect}>Csatlakozás</button>
                 <button onClick={onClose}>Vissza</button>
