@@ -36,7 +36,7 @@ const GenericCycleList = ({cycles, setCycles, type}) => {
 
                         {type === 'interval-max' ? (
                             <div className="input-block">
-                                <label htmlFor={`maxMoisture-${index}`}>Max moisture %</label>
+                                <label htmlFor={`maxMoisture-${index}`}>Water up to % moisture</label>
                                 <input
                                     id={`maxMoisture-${index}`}
                                     type="number"

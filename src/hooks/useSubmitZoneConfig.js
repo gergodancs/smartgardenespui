@@ -1,7 +1,7 @@
 // hooks/useSubmitZoneConfig.js
 const useSubmitZoneConfig = () => {
-    const submitZoneConfig = async ({ zoneId, mode, cycles, intelligent }) => {
-        let result = { zoneId, mode };
+    const submitZoneConfig = async ({zoneId, mode, cycles, intelligent, weather}) => {
+        let result = {zoneId, mode, weather};
 
         if (mode === 'moisture-cycles') {
             result.cycles = cycles
@@ -18,12 +18,10 @@ const useSubmitZoneConfig = () => {
                     dryCycle: parseInt(c.dryCycle),
                     startMonth: parseInt(c.startMonth),
                     startDay: parseInt(c.startDay),
-                    ...(c.startHour !== '' && { startHour: parseInt(c.startHour) }),
-                    ...(c.endHour !== '' && { endHour: parseInt(c.endHour) })
+                    ...(c.startHour !== '' && {startHour: parseInt(c.startHour)}),
+                    ...(c.endHour !== '' && {endHour: parseInt(c.endHour)})
                 }));
-        }
-
-        else if (mode === 'interval-max') {
+        } else if (mode === 'interval-max') {
             result.cycles = cycles
                 .filter(c =>
                     c.intervalDays !== '' &&
@@ -36,12 +34,10 @@ const useSubmitZoneConfig = () => {
                     maxMoisture: parseInt(c.maxMoisture),
                     startMonth: parseInt(c.startMonth),
                     startDay: parseInt(c.startDay),
-                    ...(c.startHour !== '' && { startHour: parseInt(c.startHour) }),
-                    ...(c.endHour !== '' && { endHour: parseInt(c.endHour) })
+                    ...(c.startHour !== '' && {startHour: parseInt(c.startHour)}),
+                    ...(c.endHour !== '' && {endHour: parseInt(c.endHour)})
                 }));
-        }
-
-        else if (mode === 'interval-duration') {
+        } else if (mode === 'interval-duration') {
             result.cycles = cycles
                 .filter(c =>
                     c.intervalDays !== '' &&
@@ -54,33 +50,32 @@ const useSubmitZoneConfig = () => {
                     durationMinutes: parseInt(c.durationMinutes),
                     startMonth: parseInt(c.startMonth),
                     startDay: parseInt(c.startDay),
-                    ...(c.startHour !== '' && { startHour: parseInt(c.startHour) }),
-                    ...(c.endHour !== '' && { endHour: parseInt(c.endHour) })
+                    ...(c.startHour !== '' && {startHour: parseInt(c.startHour)}),
+                    ...(c.endHour !== '' && {endHour: parseInt(c.endHour)})
                 }));
-        }
-
-        else if (mode === 'intelligent-dry-cycle') {
+        } else if (mode === 'intelligent-dry-cycle') {
             result = {
                 zoneId,
                 mode,
                 dryRangeMin: parseInt(intelligent.dryRangeMin),
                 dryRangeMax: parseInt(intelligent.dryRangeMax),
-                wetMin:parseInt(intelligent.wetMin),
-                wetMax:parseInt(intelligent.wetMax),
+                wetMin: parseInt(intelligent.wetMin),
+                wetMax: parseInt(intelligent.wetMax),
                 wetHoldHours: parseInt(intelligent.wetHoldHours),
                 requiredDryHours: parseInt(intelligent.requiredDryHours),
                 dryCycleDays: parseInt(intelligent.dryCycleDays),
                 maxMoisture: parseInt(intelligent.maxMoisture),
                 skipIfRainExpected: Boolean(intelligent.skipIfRainExpected),
-                ...(intelligent.startHour !== '' && { startHour: parseInt(intelligent.startHour) }),
-                ...(intelligent.endHour !== '' && { endHour: parseInt(intelligent.endHour) })
+                ...(intelligent.startHour !== '' && {startHour: parseInt(intelligent.startHour)}),
+                ...(intelligent.endHour !== '' && {endHour: parseInt(intelligent.endHour)}),
+                weather
             };
         }
 
         try {
             const res = await fetch('/api/zone-config', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(result),
             });
 

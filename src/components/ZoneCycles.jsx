@@ -14,13 +14,12 @@ const ZoneCycles = ({zone, setVisible, setZone}) => {
     const [intelligent, setIntelligent] = useState({
         dryRangeMin: '',
         dryRangeMax: '',
-        wetMin:'',
-        wetMax:'',
-        wetHoldHours:'',
+        wetMin: '',
+        wetMax: '',
+        wetHoldHours: '',
         requiredDryHours: '',
         dryCycleDays: '',
         maxMoisture: '',
-        skipIfRainExpected: true,
         startHour: '',
         endHour: ''
     });
@@ -70,6 +69,7 @@ const ZoneCycles = ({zone, setVisible, setZone}) => {
         const updated = [...cycles];
         updated[index][field] = value;
         setCycles(updated);
+        console.log(updated);
         // Automatikus következő nap beállítása, ha az első ciklus startDate-je változott
         if (index < cycles.length - 1 && (field === 'startMonth' || field === 'startDay')) {
             const current = updated[index];
@@ -98,8 +98,8 @@ const ZoneCycles = ({zone, setVisible, setZone}) => {
                     mode === 'interval-max' ? intervalMaxCycles :
                         mode === 'interval-duration' ? intervalDurationCycles : [],
             intelligent,
-            weather: weather.enabled ? weather : { enabled: false }
-        });
+            weather: weather.enabled ? weather : {enabled: false}
+        })
     };
 
     const handleManualWater = async () => {
@@ -127,7 +127,12 @@ const ZoneCycles = ({zone, setVisible, setZone}) => {
                 <ModeTabs mode={mode} setMode={setMode}/>
                 <Calibration zone={zone}/>
                 <div>
-                    <button style={{width: '100%', backgroundColor: "#66a0cf",padding: "0.4rem 1rem", border:"1px solid lightblue"}}
+                    <button style={{
+                        width: '100%',
+                        backgroundColor: "#66a0cf",
+                        padding: "0.4rem 1rem",
+                        border: "1px solid lightblue"
+                    }}
                             onClick={handleManualWater}>
                         {watering ? 'Stop Watering' : 'Water Now'}
                     </button>

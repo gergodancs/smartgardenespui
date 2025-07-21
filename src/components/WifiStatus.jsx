@@ -36,16 +36,17 @@ const WifiStatus = ({isFormVisible}) => {
 
     return (
         <div className="wifi-status" style={{margin: "0"}}>
-            {wifi.connected ? (
+            {!isFormVisible &&
                 <div style={{display: "flex", justifyContent: "space-between"}}>
-                    <div>✅ <strong>{wifi.ssid}</strong><br/></div>
-                    <div>📶 {wifi.rssi} dBm<br/></div>
-                    <div>🌐 {wifi.ip}</div>
-                </div>
-            ) : null}
+                    {wifi.connected ?
+                        <div style={{width: '100%', textAlign: 'center', marginBottom: '3px'}}>Connected
+                            to {wifi.ssid}</div>
+                        : <div style={{width: '100%', textAlign: 'center', marginBottom: '3px'}}>Not connected</div>}
+                </div>}
+
             {wifiVisible && <WifiSetup onClose={() => setWifiVisible(false)}/>}
             {!isFormVisible && !wifiVisible && !wifi.connected &&
-                <div className="zone" style={{width: '200px'}} onClick={() => setWifiVisible(true)} >
+                <div className="zone" style={{width: '200px'}} onClick={() => setWifiVisible(true)}>
                     WiFi connect
                 </div>}
         </div>

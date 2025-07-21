@@ -33,7 +33,9 @@ export default function useZoneConfig(zone, setMode, setIntelligent, setCycles, 
                         requiredDryHours: String(data.requiredDryHours ?? ''),
                         dryCycleDays: String(data.dryCycleDays ?? ''),
                         maxMoisture: String(data.maxMoisture ?? ''),
-                        skipIfRainExpected: Boolean(data.skipIfRainExpected ?? true),
+                        wetHoldHours:String(data.wetHoldHours ?? ''),
+                        wetMin:String(data.wetMin ?? ''),
+                        wetMax:String(data.wetMax ?? ''),
                         startHour: String(data.startHour ?? ''),
                         endHour: String(data.endHour ?? '')
                     });

@@ -17,7 +17,7 @@ const MoistureBasedForm = ({index, formData, onChange, onDelete}) => {
 
             <div className="form-group">
                 <div className="input-block">
-                    <label htmlFor={`minMoisture-${index}`}>Min moisture %</label>
+                    <label htmlFor={`minMoisture-${index}`}>Enable watering below %</label>
                     <input
                         id={`minMoisture-${index}`}
                         type="number"
@@ -26,7 +26,7 @@ const MoistureBasedForm = ({index, formData, onChange, onDelete}) => {
                     />
                 </div>
                 <div className="input-block">
-                    <label htmlFor={`maxMoisture-${index}`}>Max moisture %</label>
+                    <label htmlFor={`maxMoisture-${index}`}>Water up to %</label>
                     <input
                         id={`maxMoisture-${index}`}
                         type="number"

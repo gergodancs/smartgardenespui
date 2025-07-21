@@ -64,7 +64,7 @@ const IntelligentForm = ({intelligent, setIntelligent}) => {
                     <select
                         id={`startHour`}
                         value={intelligent.startHour || ''}
-                        onChange={(e) => setIntelligent(...intelligent, 'startHour', e.target.value)}
+                        onChange={(e) => setIntelligent({...intelligent, startHour: e.target.value})}
                     >
                         <option value="">Any time</option>
                         {[...Array(24)].map((_, i) => (
@@ -77,7 +77,7 @@ const IntelligentForm = ({intelligent, setIntelligent}) => {
                     <select
                         id={`endHour`}
                         value={intelligent.endHour || ''}
-                        onChange={(e) => setIntelligent(...intelligent, 'endHour', e.target.value)}
+                        onChange={(e) => setIntelligent({...intelligent, endHour: e.target.value})}
                     >
                         <option value="">Any time</option>
                         {[...Array(24)].map((_, i) => (

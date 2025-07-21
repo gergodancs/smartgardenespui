@@ -60,7 +60,7 @@ const WifiSetup = ({onClose}) => {
             </div>
 
             <div className="wifi-button">
-                <button onClick={handleConnect}>Csatlakozás</button>
+                <button onClick={handleConnect} disabled={!selectedSsid && !password}>Csatlakozás</button>
                 <button onClick={onClose}>Vissza</button>
             </div>
             {
