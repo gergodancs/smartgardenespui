@@ -36,12 +36,8 @@ const Calibration = ({zone}) => {
     return (
         <>
             <div className="water-now mb0">
-                <button onClick={() => handleCalibration('dry')}>Calibrate dry</button>
-                <button onClick={() => handleCalibration('wet')}>Calibrate wet</button>
-            </div>
-            <div className="calibration-values">
-                <div style={{fontSize: "13px"}}>Dry value: {calibration.dryValue ?? 'unset'}</div>
-                <div style={{fontSize: "13px"}}>Wet value: {calibration.wetValue ?? 'unset'}</div>
+                <button onClick={() => handleCalibration('dry')}>Dry value: {calibration.dryValue ?? 'Calibrate dry'}</button>
+                <button onClick={() => handleCalibration('wet')}>Wet value: {calibration.wetValue ?? 'Calibrate wet'}</button>
             </div>
         </>
     )

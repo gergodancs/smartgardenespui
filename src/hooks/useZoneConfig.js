@@ -21,9 +21,10 @@ export default function useZoneConfig(zone, setMode, setIntelligent, setCycles, 
                         startHour: String(c.startHour ?? ''),
                         endHour: String(c.endHour ?? '')
                     }));
-                    setCycles([...filledCycles, ...new Array(4 - filledCycles.length).fill({
-                        minMoisture: '', maxMoisture: '', dryCycle: '', startMonth: '', startDay: ''
-                    })]);
+                    setCycles(filledCycles.length > 0 ? filledCycles : [{
+                        minMoisture: '', maxMoisture: '', dryCycle: '', startMonth: '', startDay: '', startHour: '', endHour: ''
+                    }]);
+
                 }
 
                 if (data.mode === 'intelligent-dry-cycle') {
